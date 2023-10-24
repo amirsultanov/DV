@@ -1,7 +1,30 @@
 #include <iostream>
 #include<chrono> 
+#include <fstream>
 
 using namespace std;
+
+ofstream out("results.txt");      
+
+void marktime(int(*func)(int), int a, string func_name){
+    auto begin =chrono::steady_clock::now();
+    func(a);
+    auto end = chrono::steady_clock::now();
+    auto elapsed_ms = chrono::duration_cast<chrono::microseconds>(end - begin);
+    if (out.is_open())
+    {
+        out << "Время работы функции " << func_name << ": "<< elapsed_ms.count() << " (мкС)" << endl;
+    }
+
+}
+
+int factorial_line(int a){
+    int result=1;
+    for(int i=1; i<=a; ++i){
+        result=result*i;
+    }
+    return result;
+}
 
 int factorial(int n)
 {
@@ -13,17 +36,8 @@ int factorial(int n)
 }
 
 int main(){
-setlocale(LC_ALL, ".UTF8");
-int n;
-cin >> n;
-cout << factorial(n);
-auto begin =chrono::steady_clock::now(); 
-for(int i=0; i<10000; ++i){
-    int a=0;
-}
-auto end = chrono::steady_clock::now();
-
-auto elapsed_ms = chrono::duration_cast<chrono::microseconds>(end - begin);
-
-cout << "Время работы алгоритма по формированию последовательности: " << elapsed_ms.count() << " (мкС)" << endl;
+    setlocale(LC_ALL, ".UTF8");
+    marktime(factorial,1000,"factorial");
+    marktime(factorial_line,1000,"factorial_line");
+    out.close(); 
 }
