@@ -72,7 +72,7 @@ string delete_spaces(string str){
     return message;
 }
 int main(){
-
+    //Чтение данных их файла
     ifstream in("input.txt");
     int n;
     string str;
@@ -83,10 +83,9 @@ int main(){
     }
     in.close();
     cout << n << " " << str;
-    // cout <<"\n"<<delete_spaces(str);
+    //Запись данных в файл
     ofstream out("output.txt");
     if(out.is_open()){
-        out <<"\n"<<delete_spaces(str);
         out <<"\n"<<long_word(str);
         out <<"\n"<< reverse(str);
         out <<"\n"<< func(str);
