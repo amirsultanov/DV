@@ -6,6 +6,7 @@
 #include <cmath>
 
 using namespace std;
+
 //Создание генератора случайных чисел
 random_device rd;
 mt19937 gen(rd());
@@ -128,5 +129,4 @@ int main(){
 
     generate_by_sin(d,100);
     save_to_file(d, 100, "double_by_sin.csv");
-
 }
