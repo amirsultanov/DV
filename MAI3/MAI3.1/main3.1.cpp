@@ -65,18 +65,6 @@ void generate_by_descending_double(int size){
         a=i+dist(gen);
     }
 }
-// void generate_by_random_int(int size){
-//     int a;
-//     for(int i=0; i<size; ++i){
-//         a=i;
-//     }
-// }
-// void generate_by_random_double(int size){
-//     double a;
-//     for(int i=0; i<size; ++i){
-//         a=i+dist(gen);
-//     }
-// }
 void generate_by_sin_int(int size){
     int a;
     for(int i=0; i<size; ++i){
@@ -205,6 +193,5 @@ int main(){
         marktime_double(generate_by_descending_double, "generate_by_descending_double.csv", i);
         marktime_int(generate_by_sin_int, "generate_by_sin_int.csv", i);
         marktime_double(generate_by_sin_double, "generate_by_sin_double.csv", i);
-
-    }
+}
 }
