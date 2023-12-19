@@ -17,11 +17,24 @@ int const IF_COUNT=0, SWAP_COUNT=1;
 int shaker_count[2];
 int merge_count[2];
 
+int sizes[4]={1000,10000, 50000, 100000};
+
+int get_random_number(int min, int max)
+{
+  // Установить генератор случайных чисел
+  srand(time(NULL));
+
+  // Получить случайное число - формула
+  int num = min + rand() % (max - min + 1);
+
+  return num;
+}
+
 void marktime(void(*func)(int*,int),string file_name,int* arr, int size){
     auto begin =chrono::steady_clock::now();
     func(arr, size);
     auto end = chrono::steady_clock::now();
-    auto elapsed_ms = chrono::duration_cast<chrono::nanoseconds>(end - begin);
+    auto elapsed_ms = chrono::duration_cast<chrono::milliseconds>(end - begin);
     out.open(file_name, ios::app /*открывает файл до записи*/);
     if (out.is_open())
     {
@@ -31,8 +44,9 @@ void marktime(void(*func)(int*,int),string file_name,int* arr, int size){
 
 }
 void generate_by_ascending(int* arr, int size){
-    for(int i=0; i<size; ++i){
-        arr[i]=i;
+    arr[0]=get_random_number(0,10);
+    for(int i=1; i<size; ++i){
+        arr[i]=arr[i-1]+get_random_number(0,10);
     }
 }
 void generate_by_descending(int* arr, int size){
@@ -147,7 +161,7 @@ void merge(int* arr,int left, int mid, int right, int size){
         save_to_file(arr, 15, "merge_file.txt");
     }
 }
-void mergeSortIterative(int* arr, int size){
+void merge_sort_iterative(int* arr, int size){
     merge_count[SWAP_COUNT]=0;
     merge_count[IF_COUNT]=0;
   for(int i = 1; i< size; i *= 2){
@@ -162,20 +176,37 @@ void mergeSortIterative(int* arr, int size){
   } 
 }
 int main(){
-    int arr[15];
-    generate_by_ascending(arr,15);
-    save_to_file(arr, 15, "arrays.txt");
+    int k[15];
+    generate_by_descending(k,15);
+    sort_sheyk(k,15);
+    generate_by_descending(k,15);
+    merge_sort_iterative(k, 15);
 
-    generate_by_descending(arr,15);
-    save_to_file(arr, 15, "arrays.txt");
+    
+    for(auto n: sizes){
+        int arr[n];
+        generate_by_ascending(arr, n);
+        marktime(sort_sheyk, "sheyk_acsending.csv", arr, n);
+        cout<<"sheyk_acsending.csv " <<n<<"\n";
 
-    mergeSortIterative(arr, 15);
+        generate_by_descending(arr, n);
+        marktime(sort_sheyk, "sheyk_decsending.csv", arr, n);
+        cout<<"sheyk_decsending.csv " <<n<<"\n";
 
-    // generate_by_random(arr,15);
-    // save_to_file(arr, 15, "arrays.txt");
+        generate_by_random(arr, n);
+        marktime(sort_sheyk, "sheyk_random.csv", arr, n);
+        cout<<"sheyk_random.csv " <<n<<"\n";
 
-    // bubbles_sort(arr,15);
+        generate_by_ascending(arr, n); 
+        marktime(merge_sort_iterative, "merge_acsending.csv", arr, n);
+        cout<<"merge_acsending.csv " <<n<<"\n";
 
-    sort_sheyk(arr, 15);
+        generate_by_descending(arr, n);
+        marktime(merge_sort_iterative, "merge_decsending.csv", arr, n);
+        cout<<"merge_decsending.csv " <<n<<"\n";
 
+        generate_by_random(arr, n);
+        marktime(merge_sort_iterative, "merge_random.csv", arr, n);
+        cout<<"merge_random.csv " <<n<<"\n";
+    }
 }
